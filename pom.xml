@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Parent -->
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+
+    <groupId>net.vlad</groupId>
+    <artifactId>arquillian-spock-gradle</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+    <name>Arquillian suite extension</name>
+    <inceptionYear>2013</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+    
+
+    <properties>
+        <!-- Encodings -->
+        <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Java versions -->
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        
+        <!-- Libraries versions -->
+        <version.arquillian_core>1.1.7.Final</version.arquillian_core>
+        <version.jbossas>7.2.0.Final</version.jbossas>
+        <version.wildfly>8.2.0.Final</version.wildfly>
+		<version.aruillian.spock>1.0.0.Beta3</version.aruillian.spock>
+		<!--version.spock>1.0-groovy-2.3</version.spock-->
+		<version.groovy>2.3.9</version.groovy>	
+		<version.spock>0.7-groovy-2.0</version.spock>
+		<!--version.groovy>2.1.8</version.groovy-->	
+		<version.gmaven>1.4</version.gmaven>
+
+
+        
+        <!-- Other props -->
+        <jbossHome>/opt/devel/jboss/jboss-eap-6.3-dev</jbossHome>
+        
+        <test.container>standalone</test.container>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${version.arquillian_core}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-test-impl-base</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.core</groupId>
+            <artifactId>arquillian-core-impl-base</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId>
+            <type>jar</type>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.8</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <version>1.0.2.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!--Test dependencies-->
+        <dependency>
+            <groupId>org.jboss.arquillian.protocol</groupId>
+            <artifactId>arquillian-protocol-servlet</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency-->
+
+    <dependency>
+      <groupId>org.jboss.arquillian.spock</groupId>
+      <artifactId>arquillian-spock-container</artifactId>
+      <version>${version.aruillian.spock}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- External Projects -->
+    <dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <scope>test</scope>
+      <version>${version.spock}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <scope>test</scope>
+      <version>${version.groovy}</version>
+    </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+        
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.16</version>
+                <configuration>
+                    <environmentVariables>
+                        <JBOSS_HOME>${jbossHome}</JBOSS_HOME>
+                    </environmentVariables>
+                    <systemPropertyVariables>
+                        <arquillian.debug>true</arquillian.debug>
+                        <!--arquillian.launch>${test.container}</arquillian.launch-->
+                    </systemPropertyVariables>
+          <includes>
+            <include>**/*Spec.java</include>
+          </includes>
+                </configuration>
+            </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/groovy</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/test/groovy</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+        <plugin>
+            <groupId>org.codehaus.gmavenplus</groupId>
+            <artifactId>gmavenplus-plugin</artifactId>
+            <version>${version.gmaven}</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>addSources</goal>
+                        <goal>addTestSources</goal>
+                        <goal>generateStubs</goal>
+                        <goal>compile</goal>
+                        <goal>testGenerateStubs</goal>
+                        <goal>testCompile</goal>
+                        <goal>removeStubs</goal>
+                        <goal>removeTestStubs</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+        
+        <!-- Sign atrefact on release -->
+
+        <!-- An optional Arquillian testing profile that executes tests
+        in your JBoss remote instance -->
+        <profile>
+            <id>jboss-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.as</groupId>
+                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                    <version>${version.jbossas}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>groups-test</id>
+            <properties>
+                <!--groups>org.eu.ingwar.tools.arquillian.extension.groups.AlphaGroup</groups-->
+            </properties>
+        </profile>
+        
+
+        <profile>
+            <id>wildfly-remote</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>${version.wildfly}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+      
+ 
+    </profiles>
+</project>
